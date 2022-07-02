@@ -57,6 +57,10 @@
     button {
       font-size: 16px;
       padding: 10px 20px;
+      background-color: #ddd;
+    }
+    button:active {
+      background-color: #fff;
     }
   </style>
 </head>
@@ -69,7 +73,7 @@
   </main>
 <script>
   function toggleSwitch(pin){
-    post('/api/toggle', pin);
+    post('/api/toggle', {pin: 4});
   }
 
 
