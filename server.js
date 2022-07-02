@@ -6,15 +6,15 @@ const rpio = require('rpio');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-let gpio_state = {}
+const _gpioState = {}
 
 app.post('/api/toggle', (req, res) => {
   const pin = parseInt(req.body.pin);
-  if(typeof gpio_state == 'undefined')
+  if(typeof _gpioState[pin] == 'undefined')
     rpio.open(port, rpio.OUTPUT, OFF);
 
-  gpio_state[pin] = !gpio_state;
-  rpio.write(pin, gpio_state[pin] ? rpio.HIGH : rpio.LOW)
+  _gpioState[pin] = !_gpioState[pin];
+  rpio.write(pin, _gpioState[pin] ? rpio.HIGH : rpio.LOW)
   res.json({success:true})
 })
 
