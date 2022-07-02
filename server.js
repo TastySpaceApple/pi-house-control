@@ -1,21 +1,18 @@
 const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
-const rpio = require('rpio');
+const Gpio = require('onoff').Gpio; // Gpio class
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const _gpioState = {}
+app.post('/api/toggle', async (req, res) => {
+  const pinNumber = parseInt(req.body.pin);
+  const pin = new Gpio(pinNumber, 'out');
+  
+  const value = await pin.read();
+  await pin.write(value ^ 1);
 
-app.post('/api/toggle', (req, res) => {
-  const pin = parseInt(req.body.pin);
-  if(!(pin in _gpioState))
-    rpio.open(pin, rpio.OUTPUT, rpio.LOW);
-
-  _gpioState[pin] = !_gpioState[pin];
-  console.log(pin, _gpioState[pin]);
-  rpio.write(pin, _gpioState[pin] ? rpio.HIGH : rpio.LOW)
   res.json({success:true})
 })
 
