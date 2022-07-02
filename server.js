@@ -10,10 +10,11 @@ const _gpioState = {}
 
 app.post('/api/toggle', (req, res) => {
   const pin = parseInt(req.body.pin);
-  if(typeof _gpioState[pin] == 'undefined')
+  if(!(pin in _gpioState))
     rpio.open(pin, rpio.OUTPUT, rpio.LOW);
 
   _gpioState[pin] = !_gpioState[pin];
+  console.log(pin, _gpioState[pin]);
   rpio.write(pin, _gpioState[pin] ? rpio.HIGH : rpio.LOW)
   res.json({success:true})
 })
